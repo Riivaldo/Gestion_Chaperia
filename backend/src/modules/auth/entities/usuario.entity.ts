@@ -11,7 +11,7 @@ export class UsuarioEntity {
   @Column()
   appaterno!: string;
 
-  @Column({ nullable: true }) // Permite guardar nulos
+  @Column({ nullable: true })
   apmaterno?: string;
 
   @Column({ unique: true })

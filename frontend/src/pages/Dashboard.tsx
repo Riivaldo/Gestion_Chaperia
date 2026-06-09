@@ -133,7 +133,7 @@ export const Dashboard: React.FC = () => {
             </h3>
             <div className="space-y-4">
               {data.empleadosRendimiento.map((emp, idx) => {
-                // Calculamos el ancho máximo relativo a 15 trabajos máximos
+                
                 const anchoPorcentaje = Math.min(
                   (emp.terminados / 15) * 100,
                   100,

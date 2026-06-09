@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
-import VehiclesPage from "./pages/VehiclesPages"; // El que corregimos antes
+import VehiclesPage from "./pages/VehiclesPages"; 
 import { LogsPage } from "./pages/LogsPage";
 import { Register } from "./pages/Register";
 import { DashboardLayout } from "./layouts/MainLayout";

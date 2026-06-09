@@ -8,7 +8,6 @@ async function bootstrap() {
   // Prefijo global
   app.setGlobalPrefix('api');
 
-  //Activamos las validaciones aut de los DTOs
   app.useGlobalPipes(new ValidationPipe());
 
   //React se conecte sin bloqueos de seguridad

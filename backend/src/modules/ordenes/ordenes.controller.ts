@@ -21,7 +21,7 @@ export class OrdenesController {
     return this.ordenesService.finalizarTrabajo(id);
   }
 
-  // RUTAS PARA LOS GRÁFICOS DEL DASHBOARD
+  // RUTAS PARA LOS GRÁFICOS LAS ESTADISTICAS Y DEMAS
   @Get('dashboard/ingresos')
   async totalIngresos() {
     return this.ordenesService.obtenerIngresosTotales();

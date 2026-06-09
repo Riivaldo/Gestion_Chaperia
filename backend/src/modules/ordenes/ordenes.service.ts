@@ -20,14 +20,14 @@ export class OrdenesService {
     return await this.ordenRepo.save(nuevaOrden);
   }
 
-  // Listar todas las órdenes con sus JOINS (para ver qué auto y qué mecánico es)
+  // lISTAR LAS ORDENES CON LOS MECANICOS
   async obtenerTodas(): Promise<OrdenEntity[]> {
     return await this.ordenRepo.find({
       relations: {
         vehiculo: true,
         mecanico: true,
       },
-      order: { fecha_ingreso: 'DESC' }, // Las más recientes primero
+      order: { fecha_ingreso: 'DESC' },
     });
   }
 
@@ -40,17 +40,11 @@ export class OrdenesService {
     return await this.ordenRepo.save(orden);
   }
 
-  // =========================================================================
-  // MÉTODOS ESTADÍSTICOS PARA LOS GRÁFICOS DEL DASHBOARD (RÚBRICA)
-  // =========================================================================
+  // 1. Gráfico de Ingresos Totales: Suma todo el dinero recaudado este o no el trabajo terminado
 
-  // 1. Gráfico de Ingresos Totales: Suma todo el dinero recaudado
-  // 1. Gráfico de Ingresos Totales: Suma todo el dinero recaudado
   async obtenerIngresosTotales(): Promise<{ ingresos_totales: number }> {
-    // Le decimos a TypeScript que el resultado es un arreglo estricto de OrdenEntity
     const resultado: OrdenEntity[] = await this.ordenRepo.find();
 
-    // Tipamos explícitamente tanto el acumulador (sum) como el elemento actual (orden)
     const total = resultado.reduce(
       (sum: number, orden: OrdenEntity): number => {
         return sum + Number(orden.monto_total);
@@ -60,15 +54,10 @@ export class OrdenesService {
 
     return { ingresos_totales: total };
   }
-
-  // 2. Gráfico de Rendimiento: Cuenta cuántos autos terminó cada mecánico
-  // 2. Gráfico de Rendimiento: Cuenta cuántos autos terminó cada mecánico
   // 2. Gráfico de Rendimiento: Cuenta cuántos autos terminó cada mecánico
   async obtenerRendimientoMecanicos(): Promise<
     Array<{ mecanico: string; autos_terminados: number }>
   > {
-    // Truco definitivo: Declaramos la variable directamente como un arreglo de cualquier objeto (any[])
-    // De esta forma evitamos hacer una aserción floja con 'as' al final
     const resultadoNativo: any[] = await this.ordenRepo
       .createQueryBuilder('orden')
       .leftJoinAndSelect('orden.mecanico', 'mecanico')
@@ -82,7 +71,6 @@ export class OrdenesService {
       .addGroupBy('mecanico.appaterno')
       .getRawMany();
 
-    // Mapeamos de forma segura convirtiendo cada propiedad para el reporte de React
     return resultadoNativo.map((item: Record<string, any>) => ({
       mecanico: String(item.mecanico || 'Desconocido'),
       autos_terminados: Number(item.autos_terminados || 0),

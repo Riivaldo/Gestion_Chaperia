@@ -32,7 +32,6 @@ export class OrdenEntity {
   @CreateDateColumn({ type: 'timestamp' })
   fecha_ingreso!: Date;
 
-  // CONEXIONES/JOINS AUTOMÁTICOS
   @ManyToOne(() => VehiculoEntity)
   @JoinColumn({ name: 'id_vehiculo' })
   vehiculo?: VehiculoEntity;

@@ -26,7 +26,7 @@ export class AuthService {
   ) {}
 
   async registrar(dto: RegisterDto): Promise<UsuarioEntity> {
-    // 1. Verificar si el username ya existe
+    //  Verificar si el username ya existe
     const usernameExists = await this.usuarioRepo.findOne({
       where: { username: dto.username },
     });
@@ -35,7 +35,7 @@ export class AuthService {
       throw new BadRequestException('El nombre de usuario ya está registrado');
     }
 
-    // 2. Verificar si el CI ya existe
+    //  Verificar si el CI ya existe
     const ciExists = await this.usuarioRepo.findOne({
       where: { ci: dto.ci },
     });
@@ -44,31 +44,31 @@ export class AuthService {
       throw new BadRequestException('El CI ya está registrado');
     }
 
-    // 3. Encriptar la contraseña con SHA256
+    //  Encriptar la contraseña con SHA256
     const hashedPassword = crypto
       .createHash('sha256')
       .update(dto.password)
       .digest('hex');
 
-    // 4. Crear el nuevo usuario (FORMA CORRECTA)
+    //  Crear el nuevo usuario
     const nuevoUsuario = new UsuarioEntity();
     nuevoUsuario.nombre = dto.nombre;
     nuevoUsuario.appaterno = dto.appaterno;
-    nuevoUsuario.apmaterno = dto.apmaterno || undefined; // ← Usar undefined en lugar de null
+    nuevoUsuario.apmaterno = dto.apmaterno || undefined;
     nuevoUsuario.username = dto.username;
     nuevoUsuario.password_hash = hashedPassword;
     nuevoUsuario.ci = dto.ci;
     nuevoUsuario.rol = dto.rol;
     nuevoUsuario.activo = 1;
 
-    // 5. Guardar en la base de datos
+    //  Guardar en la base de datos
     const usuarioGuardado = await this.usuarioRepo.save(nuevoUsuario);
 
     return usuarioGuardado;
   }
 
   async login(dto: LoginDto, ip: string, userAgent: string): Promise<any> {
-    // 1. Verificar si el usuario existe y no está borrado (eliminación lógica)
+    //  Verificar si el usuario existe y no está borrado (eliminación lógica)
     const usuario = await this.usuarioRepo.findOne({
       where: { username: dto.username, activo: 1 },
     });
@@ -76,7 +76,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // 2. Encriptar la contraseña recibida para ver si coincide con el hash de la BD
+    //  Encriptar la contraseña recibida para ver si coincide con el hash de la BD
     const hashIngresado = crypto
       .createHash('sha256')
       .update(dto.password)
@@ -85,7 +85,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // 3. Crear y guardar el Log de Acceso
+    //  Crear y guardar el Log de Acceso
     const nuevoLog = this.logRepo.create({
       id_usuario: usuario.id_usuario,
       ip: ip,
@@ -95,7 +95,7 @@ export class AuthService {
 
     await this.logRepo.save(nuevoLog);
 
-    // 4. Generar JWT
+    //  Generar JWT
     const payload = {
       sub: usuario.id_usuario,
       username: usuario.username,

@@ -9,6 +9,6 @@ import { ClientesService } from './clientes.service';
   imports: [TypeOrmModule.forFeature([ClienteEntity, VehiculoEntity])],
   controllers: [ClientesController],
   providers: [ClientesService],
-  exports: [TypeOrmModule, ClientesService], // Exportamos para que el módulo de Órdenes pueda usar este servicio más adelante
+  exports: [TypeOrmModule, ClientesService],
 })
 export class ClientesModule {}

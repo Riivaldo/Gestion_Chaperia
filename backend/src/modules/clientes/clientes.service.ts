@@ -57,7 +57,7 @@ export class ClientesService {
     return await this.vehiculoRepo.find({
       where: { activo: 1 },
       relations: {
-        cliente: true, // Sintaxis moderna de objeto para hacer el INNER JOIN automático
+        cliente: true,
       },
     });
   }
